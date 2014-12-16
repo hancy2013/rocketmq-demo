@@ -32,3 +32,34 @@ sh mqshutdown broker
 sh mqshutdown namesrv
 ```
 
+###1主1备配置
+
+####生成broker配置模板
+```shell
+cd alibaba-rocketmq/bin/
+sh mqbroker -m > broker.properties
+#主配置
+cp broker.properties broker-m.properties
+#从配置
+cp broker.properties broker-s.properties
+```
+
+####创建日志目录
+```
+#创建日志目录
+mkdir -p /Users/zhengying/store
+#创建数据存储目录
+mkdir -p /Users/zhengying/store/commitlog
+```
+
+####启动
+
+```shell
+#启动nameserver
+nohup sh mqnamesrv > ../logs/mq.log 2>&1 &
+#启动主broker
+nohup sh mqbroker -c ../conf/1m-1s-sync/broker-m.properties > ../logs/mq.log 2>&1 &
+#启动从broker
+nohup sh mqbroker -c ../conf/1m-1s-sync/broker-s.properties > ../logs/mq.log 2>&1 &
+```
+
